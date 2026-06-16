@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: videodl-qzz
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NEXT_PUBLIC_APP_NAME
+        value: VideoDL
+      - key: NEXT_PUBLIC_APP_URL
+        value: https://videodl.qzz.io
+      - key: PUBLIC_DOMAIN
+        value: videodl.qzz.io
+      - key: DATABASE_URL
+        sync: false
+      - key: API_KEY_PEPPER
+        generateValue: true
+      - key: ADMIN_SECRET
+        generateValue: true
+      - key: ALLOW_DEMO_AUTH
+        value: "true"
+      - key: YTDLP_BIN
+        value: yt-dlp
+      - key: FFMPEG_BIN
+        value: ffmpeg
+      - key: YTDLP_TIMEOUT_MS
+        value: "60000"
+      - key: YTDLP_MAX_FILESIZE
+        value: 2G

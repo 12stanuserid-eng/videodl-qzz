@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.env
+.env.local
+*.log
+coverage
+dist
+build
+*.tsbuildinfo
+video-downloader-saas.zip
