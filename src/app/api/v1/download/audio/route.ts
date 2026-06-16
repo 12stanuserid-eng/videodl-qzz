@@ -26,11 +26,12 @@ export async function GET(request: Request) {
     });
     const normalizedUrl = normalizeAndValidateUrl(url);
 
-    const { stream, process, contentType, extension } = streamDownload(normalizedUrl, 'audio', format);
+    const { stream, process, ready, contentType, extension } = streamDownload(normalizedUrl, 'audio', format);
+    request.signal.addEventListener('abort', () => process.kill('SIGTERM'));
+    await ready;
+
     await incrementUsage(apiKey.id, '/download/audio');
     sendUsageWebhooks(apiKey.userId, { event: 'usage.audio', apiKeyId: apiKey.id, endpoint: '/download/audio' }).catch(() => undefined);
-
-    request.signal.addEventListener('abort', () => process.kill('SIGTERM'));
 
     return new Response(Readable.toWeb(stream) as ReadableStream, {
       headers: {

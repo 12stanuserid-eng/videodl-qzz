@@ -37,6 +37,13 @@ export default function HomePage() {
             <Link href="/#download" className="pulse-button rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 px-7 py-4 text-center font-bold text-white">Start free download</Link>
             <Link href="/dashboard" className="rounded-2xl border border-slate-200 bg-white px-7 py-4 text-center font-bold text-slate-700 shadow-sm transition hover:bg-slate-50">Developer API key</Link>
           </div>
+          <div className="mt-8 grid max-w-xl grid-cols-3 gap-3">
+            {['No key for visitors', 'Free developer API', '3 clean ad slots'].map((item) => (
+              <div key={item} className="rounded-2xl border border-slate-200 bg-white/80 p-3 text-center text-xs font-black text-slate-600 shadow-sm backdrop-blur">
+                {item}
+              </div>
+            ))}
+          </div>
         </div>
         <HeroVisual />
       </section>

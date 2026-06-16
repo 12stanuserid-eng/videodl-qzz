@@ -21,8 +21,9 @@ export async function GET(request: Request) {
     });
     const normalizedUrl = normalizeAndValidateUrl(url);
 
-    const { stream, process, contentType, extension } = streamDownload(normalizedUrl, 'audio', format);
+    const { stream, process, ready, contentType, extension } = streamDownload(normalizedUrl, 'audio', format);
     request.signal.addEventListener('abort', () => process.kill('SIGTERM'));
+    await ready;
 
     return new Response(Readable.toWeb(stream) as ReadableStream, {
       headers: {

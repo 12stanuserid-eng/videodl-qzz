@@ -26,11 +26,12 @@ export async function GET(request: Request) {
     });
     const normalizedUrl = normalizeAndValidateUrl(url);
 
-    const { stream, process, contentType, extension } = streamDownload(normalizedUrl, 'video', format);
+    const { stream, process, ready, contentType, extension } = streamDownload(normalizedUrl, 'video', format);
+    request.signal.addEventListener('abort', () => process.kill('SIGTERM'));
+    await ready;
+
     await incrementUsage(apiKey.id, '/download');
     sendUsageWebhooks(apiKey.userId, { event: 'usage.download', apiKeyId: apiKey.id, endpoint: '/download' }).catch(() => undefined);
-
-    request.signal.addEventListener('abort', () => process.kill('SIGTERM'));
 
     return new Response(Readable.toWeb(stream) as ReadableStream, {
       headers: {

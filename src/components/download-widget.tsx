@@ -56,6 +56,9 @@ export function DownloadWidget() {
       const response = await fetch(`${endpoint}?url=${encodeURIComponent(url)}`);
       if (!response.ok) throw new Error(await getErrorMessage(response));
       const blob = await response.blob();
+      if (blob.size === 0) {
+        throw new Error('Download failed: the source platform returned no downloadable data. Try another public video URL.');
+      }
       const downloadUrl = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = downloadUrl;
