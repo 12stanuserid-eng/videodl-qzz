@@ -10,7 +10,7 @@ A production-oriented **Next.js SaaS starter** for a multi-platform video/audio 
 - Tailwind CSS
 - Three.js lazy-loaded 3D hero icon
 - Zustand + localStorage persistence
-- Prisma + PostgreSQL
+- Prisma + SQLite for free Render deployment
 - yt-dlp + FFmpeg via Node child process
 - Docker / docker-compose
 
@@ -57,7 +57,7 @@ X-API-Key: your_api_key
 ### 1) Install requirements
 
 - Node.js 20+
-- Docker Desktop or local PostgreSQL
+- Docker Desktop optional
 - Python 3 + `yt-dlp`
 - FFmpeg
 
@@ -83,19 +83,13 @@ cp .env.example .env
 # Edit API_KEY_PEPPER and ADMIN_SECRET before production.
 ```
 
-### 3) Start database
-
-```bash
-docker compose up -d postgres
-```
-
-### 4) Install and run
+### 3) Install and run
 
 ```bash
 npm install
-npm run db:push
-npm run db:seed
-npm run dev
+DATABASE_URL=file:./dev.db npm run db:push
+DATABASE_URL=file:./dev.db npm run db:seed
+DATABASE_URL=file:./dev.db npm run dev
 ```
 
 Open `http://localhost:3000`.
@@ -107,7 +101,7 @@ cp .env.example .env
 docker compose up --build
 ```
 
-The `Dockerfile` installs FFmpeg and yt-dlp. This is recommended over serverless hosting because downloads need long-lived processes and streaming.
+The `Dockerfile` installs FFmpeg and yt-dlp. This is recommended over serverless hosting because downloads need long-lived processes and streaming. The free Render deployment uses SQLite at `file:/app/prisma/prod.db`; use external Postgres later if you need durable data across restarts.
 
 ## DigitalPlat FreeDomain setup
 
@@ -148,7 +142,7 @@ The browser UI fetches downloads with headers and saves a Blob. For very large f
 ## Important environment variables
 
 ```env
-DATABASE_URL=postgresql://...
+DATABASE_URL=file:/app/prisma/prod.db
 API_KEY_PEPPER=...
 ALLOW_DEMO_AUTH=false
 ADMIN_SECRET=...

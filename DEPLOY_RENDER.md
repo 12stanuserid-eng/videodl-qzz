@@ -2,68 +2,33 @@
 
 Target domain selected by user: **https://videodl.qzz.io**
 
-Temporary Render URL after deploy is expected to be similar to:
+Temporary Render URL after deploy is expected to be:
 
 ```txt
 https://videodl-qzz.onrender.com
 ```
 
-> I cannot create the live Render/DigitalPlat domain from this sandbox without your account access. These files make the project ready for one-click Render deployment.
+## Current setup
 
-## What you need
+- Render Docker web service
+- SQLite database file inside the container: `file:/app/prisma/prod.db`
+- No separate Postgres service required
+- Free 24h unlimited API keys
+- Exactly 3 ad slots
 
-1. GitHub account
-2. Render account
-3. Free PostgreSQL URL from Neon/Supabase/other Postgres provider
-4. DigitalPlat FreeDomain account for `videodl.qzz.io`
+> Note: Render free instances can restart/sleep. Because this free deployment uses SQLite inside the container, generated API keys can reset after a redeploy/restart. For a durable production database, connect an external Postgres later.
 
-## Step 1 — Create free PostgreSQL
+## Deployment already prepared
 
-Use Neon or Supabase and copy the Postgres connection string.
+The repo includes:
 
-It should look like:
+- `render.yaml`
+- `Dockerfile`
+- `.dockerignore`
 
-```txt
-postgresql://USER:PASSWORD@HOST/dbname?sslmode=require
-```
+## DNS for `videodl.qzz.io`
 
-## Step 2 — Push project to GitHub
-
-```bash
-git init
-git add .
-git commit -m "Deploy VideoDL free downloader"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/videodl-qzz.git
-git push -u origin main
-```
-
-## Step 3 — Deploy on Render
-
-1. Open Render Dashboard.
-2. Click **New → Blueprint**.
-3. Connect the GitHub repo.
-4. Render will read `render.yaml`.
-5. When asked for `DATABASE_URL`, paste your Neon/Supabase Postgres URL.
-6. Deploy.
-
-Render will build the Dockerfile, install FFmpeg + yt-dlp, run Prisma schema push, and start Next.js.
-
-## Step 4 — Test Render URL
-
-Open:
-
-```txt
-https://videodl-qzz.onrender.com/api/v1/health
-```
-
-Expected:
-
-```json
-{"ok":true,"service":"video-downloader-saas"}
-```
-
-## Step 5 — Connect `videodl.qzz.io`
+After Render service is live:
 
 1. Open DigitalPlat FreeDomain dashboard.
 2. Register/select `videodl.qzz.io`.
@@ -81,20 +46,14 @@ If DigitalPlat asks for full host, use:
 videodl.qzz.io
 ```
 
-4. In Render service → **Settings → Custom Domains**, add:
+4. In Render service → Settings → Custom Domains, add:
 
 ```txt
 videodl.qzz.io
 ```
-
-5. Wait for DNS/SSL propagation.
 
 Final live URL:
 
 ```txt
 https://videodl.qzz.io
 ```
-
-## Important
-
-`ALLOW_DEMO_AUTH=true` is enabled because this app is free/no-payment and users can generate 24h API keys with email. For serious public traffic, add CAPTCHA/WAF/rate-limit key generation to stop abuse.

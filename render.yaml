@@ -15,7 +15,7 @@ services:
       - key: PUBLIC_DOMAIN
         value: videodl.qzz.io
       - key: DATABASE_URL
-        sync: false
+        value: file:/app/prisma/prod.db
       - key: API_KEY_PEPPER
         generateValue: true
       - key: ADMIN_SECRET
