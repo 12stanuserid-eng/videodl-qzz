@@ -1,6 +1,6 @@
 # VidSaaS — Video Downloader SaaS Platform
 
-A production-oriented **Next.js SaaS starter** for a multi-platform video/audio downloader API powered by **yt-dlp + FFmpeg**. It includes a clean white Apple-like UI, 3D animation hooks, free 24-hour unlimited API keys, usage analytics, exactly 3 ad slots, Docker deployment, and DigitalPlat FreeDomain guidance.
+A production-oriented **Next.js SaaS starter** for a multi-platform video/audio downloader API powered by **yt-dlp + FFmpeg**. It includes a clean white Apple-like UI, 3D animation hooks, a public no-key website downloader, free 24-hour developer API keys, usage analytics, exactly 3 ad slots, Docker deployment, and DigitalPlat FreeDomain guidance.
 
 > Compliance: run this only for content the user owns, created, licensed, or is authorized to download. Do not use it to bypass DRM, paywalls, access controls, logins, or platform restrictions.
 
@@ -21,9 +21,10 @@ A production-oriented **Next.js SaaS starter** for a multi-platform video/audio 
 - Mobile-first responsive SPA-like UX with persisted URL/API key state
 - Exactly 3 ad slots: top 728x90, in-content 300x250, footer 728x90
 - No payment system and no paid plans
-- Free API key creation, hashing, 24-hour expiry, revoke
-- Daily/monthly/total usage tracking
-- Unlimited requests for the active 24-hour free key
+- Public website downloader uses `/api/public/*` and requires no API key
+- Developer API key creation, hashing, 24-hour expiry, revoke
+- Daily/monthly/total usage tracking for developer API keys
+- Unlimited requests for the active 24-hour developer key
 - yt-dlp info and streaming download/audio endpoints
 - Supported sites endpoint using `yt-dlp --list-extractors`
 - Webhook sender helper for usage events
@@ -36,17 +37,25 @@ Base URL:
 https://your-domain.com/api/v1
 ```
 
-Authentication:
+Authentication for developer API:
 
 ```txt
 X-API-Key: your_api_key
 ```
 
+Public website endpoints do not require a key:
+
+```txt
+/api/public/info?url=URL
+/api/public/download?url=URL
+/api/public/download/audio?url=URL
+```
+
 | Method | Endpoint | Purpose |
 |---|---|---|
-| GET | `/download?url=VIDEO_URL` | Download video |
-| GET | `/download/audio?url=URL` | Download audio only |
-| GET | `/info?url=URL` | Get video metadata |
+| GET | `/download?url=VIDEO_URL` | Developer API: download video |
+| GET | `/download/audio?url=URL` | Developer API: download audio only |
+| GET | `/info?url=URL` | Developer API: get video metadata |
 | GET | `/usage` | Check API key usage |
 | POST | `/api-keys/generate` | Generate API key |
 | DELETE | `/api-keys/:id/revoke` | Revoke API key |

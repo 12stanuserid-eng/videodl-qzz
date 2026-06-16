@@ -25,8 +25,8 @@ export const PLANS: Record<PlanId, Plan> = {
     ads: true,
     sla: false,
     features: [
-      'Unlimited requests for 1 day',
-      '1 free API key at a time',
+      'Website downloads need no API key',
+      'Developer API key valid for 24 hours',
       'Video + audio downloads',
       'Ad-supported platform — no payment required'
     ]

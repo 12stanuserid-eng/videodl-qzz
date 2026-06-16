@@ -17,7 +17,7 @@ export function PricingCards() {
               <span className="text-5xl font-black text-slate-950">{plan.price}</span>
               <span className="text-slate-500"> / {plan.billing}</span>
             </div>
-            <p className="mt-3 text-base font-semibold text-slate-600">Unlimited requests for one day. Renew by generating a fresh free key after expiry.</p>
+            <p className="mt-3 text-base font-semibold text-slate-600">Homepage downloads are unlimited with no key. Developer API keys are free, unlimited, and valid for 24 hours.</p>
             <ul className="mt-6 grid gap-3 text-sm text-slate-600 sm:grid-cols-2">
               {plan.features.map((feature) => (
                 <li key={feature} className="flex gap-2"><span className="text-blue-600">✓</span>{feature}</li>
@@ -25,7 +25,7 @@ export function PricingCards() {
             </ul>
           </div>
           <a href="/dashboard" className="pulse-button rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 px-7 py-4 text-center font-bold text-white">
-            Generate Free 24h Key
+            Developer API Key
           </a>
         </div>
       </TiltCard>

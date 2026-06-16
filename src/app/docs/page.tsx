@@ -24,7 +24,8 @@ export default function DocsPage() {
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
         <p className="text-sm font-black uppercase tracking-[0.26em] text-blue-600">REST API</p>
         <h1 className="mt-3 text-5xl font-black text-slate-950">Developer documentation</h1>
-        <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">Base URL: <code className="rounded-lg bg-slate-100 px-2 py-1">{baseUrl}/api/v1</code>. Authenticate with <code className="rounded-lg bg-slate-100 px-2 py-1">X-API-Key: your_api_key</code>. No payment is required — generated keys are unlimited for 24 hours.</p>
+        <div className="mt-6 rounded-[2rem] border border-emerald-200 bg-emerald-50 p-5 text-emerald-900"><h2 className="font-black">Clear rule</h2><p className="mt-1 text-sm leading-6">This website downloader works without an API key. API keys are required only when a developer uses VideoDL on another website/app.</p></div>
+        <p className="mt-8 max-w-3xl text-lg leading-8 text-slate-600">Base URL: <code className="rounded-lg bg-slate-100 px-2 py-1">{baseUrl}/api/v1</code>. Authenticate with <code className="rounded-lg bg-slate-100 px-2 py-1">X-API-Key: your_api_key</code>. No payment is required — generated keys are unlimited for 24 hours.</p>
 
         <div className="mt-10 overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-soft">
           {endpoints.map(([method, path, description]) => (
