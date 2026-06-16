@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { authenticateApiKey, assertWithinRateLimit, incrementUsage } from '@/lib/api-keys';
 import { errorJson, json } from '@/lib/http';
 import { normalizeAndValidateUrl } from '@/lib/security';
+import { getTeraboxInfo, isTeraboxUrl } from '@/lib/terabox';
 import { getVideoInfo } from '@/lib/ytdlp';
 import { sendUsageWebhooks } from '@/lib/webhooks';
 
@@ -19,7 +20,7 @@ export async function GET(request: Request) {
     const { url } = querySchema.parse({ url: searchParams.get('url') || '' });
     const normalizedUrl = normalizeAndValidateUrl(url);
 
-    const info = await getVideoInfo(normalizedUrl);
+    const info = isTeraboxUrl(normalizedUrl) ? await getTeraboxInfo(normalizedUrl) : await getVideoInfo(normalizedUrl);
     await incrementUsage(apiKey.id, '/info');
     sendUsageWebhooks(apiKey.userId, { event: 'usage.info', apiKeyId: apiKey.id, endpoint: '/info' }).catch(() => undefined);
 

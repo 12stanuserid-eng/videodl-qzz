@@ -3,6 +3,7 @@ import { Readable } from 'node:stream';
 import { authenticateApiKey, assertWithinRateLimit, incrementUsage } from '@/lib/api-keys';
 import { errorJson } from '@/lib/http';
 import { normalizeAndValidateUrl } from '@/lib/security';
+import { createTeraboxResponse, isTeraboxUrl } from '@/lib/terabox';
 import { safeFilename, streamDownload } from '@/lib/ytdlp';
 import { sendUsageWebhooks } from '@/lib/webhooks';
 
@@ -25,6 +26,13 @@ export async function GET(request: Request) {
       format: searchParams.get('format') || undefined
     });
     const normalizedUrl = normalizeAndValidateUrl(url);
+
+    if (isTeraboxUrl(normalizedUrl)) {
+      const response = await createTeraboxResponse(normalizedUrl, 'video');
+      await incrementUsage(apiKey.id, '/download');
+      sendUsageWebhooks(apiKey.userId, { event: 'usage.download', apiKeyId: apiKey.id, endpoint: '/download' }).catch(() => undefined);
+      return response;
+    }
 
     const { stream, process, ready, contentType, extension } = streamDownload(normalizedUrl, 'video', format);
     request.signal.addEventListener('abort', () => process.kill('SIGTERM'));

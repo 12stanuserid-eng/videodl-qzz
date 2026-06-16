@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { errorJson, json } from '@/lib/http';
 import { normalizeAndValidateUrl } from '@/lib/security';
+import { getTeraboxInfo, isTeraboxUrl } from '@/lib/terabox';
 import { getVideoInfo } from '@/lib/ytdlp';
 
 export const runtime = 'nodejs';
@@ -13,7 +14,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const { url } = querySchema.parse({ url: searchParams.get('url') || '' });
     const normalizedUrl = normalizeAndValidateUrl(url);
-    const info = await getVideoInfo(normalizedUrl);
+    const info = isTeraboxUrl(normalizedUrl) ? await getTeraboxInfo(normalizedUrl) : await getVideoInfo(normalizedUrl);
 
     return json({
       data: info,

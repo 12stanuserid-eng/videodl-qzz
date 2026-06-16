@@ -30,3 +30,5 @@ services:
         value: "60000"
       - key: YTDLP_MAX_FILESIZE
         value: 2G
+      - key: TERABOX_COOKIE
+        value: ""
